@@ -1,0 +1,123 @@
+- name: Run inception
+  hosts: cloud1
+  become: yes
+  tasks:
+  - name: Check if inception source is present on remote
+    stat:
+      path: /home/vagrant/inception
+    register: inception_source
+
+  - name: Send inception source
+    copy:
+      src: ../inception
+      dest: /home/vagrant
+    when: not inception_source.stat.exists
+
+  - name: Set /etc/hosts file
+    lineinfile:
+      dest: /etc/hosts
+      line: "127.0.0.1 mlabouri.42.fr"
+
+  - name: Create volume folder
+    file:
+      path: /home/vagrant/data
+      state: directory
+  
+  - name: Create db volume folder
+    file:
+      path: /home/vagrant/data/db
+      state: directory
+  
+  - name: Create wordpress volume folder
+    file:
+      path: /home/vagrant/data/wp-data
+      state: directory
+  
+  - name: Build mariadb image
+    docker_image:
+      name: inception_mariadb
+      state: present
+      source: build
+      build:
+        path: /home/vagrant/inception/srcs/requirements/mariadb
+  
+  - name: Build php image
+    docker_image:
+      name: inception_php
+      state: present
+      source: build
+      build:
+        path: /home/vagrant/inception/srcs/requirements/wordpress
+
+  - name: Build nginx image
+    docker_image:
+      name: inception_nginx
+      state: present
+      source: build
+      build:
+        path: /home/vagrant/inception/srcs/requirements/nginx
+
+  - name: Create inception network
+    docker_network:
+      state: present
+      name: inception
+
+  - name: Create wp-data volume
+    docker_volume:
+      name: inception_wp-data
+      state: present
+      driver_options:
+        type: none
+        device: /home/vagrant/data/wp-data
+        o: bind
+
+  - name: Create db volume
+    docker_volume:
+      name: inception_db
+      state: present
+      driver_options:
+        type: none
+        device: /home/vagrant/data/db
+        o: bind
+  
+  - name: Run mariadb container
+    docker_container:
+      state: started
+      name: inception-mariadb-1
+      image: inception_mariadb
+      env_file: /home/vagrant/inception/srcs/.env
+      restart_policy: always
+      networks:
+        - name: "inception"
+          aliases: "mariadb"
+      volumes:
+        - "inception_db:/var/lib/mysql"
+  
+  - name: Run php container
+    docker_container:
+      state: started
+      name: inception-php-1
+      image: inception_php
+      env_file: /home/vagrant/inception/srcs/.env
+      restart_policy: always
+      networks:
+        - name: "inception"
+          aliases: "php"
+      volumes:
+        - "inception_wp-data:/var/www/html"
+  
+  - name: Run nginx container
+    docker_container:
+      state: started
+      name: inception-nginx-1
+      image: inception_nginx
+      env_file: /home/vagrant/inception/srcs/.env
+      restart_policy: always
+      ports:
+        - "443:443"
+      networks:
+        - name: "inception"
+          aliases: "nginx"
+      volumes:
+        - "inception_wp-data:/var/www/html"
+

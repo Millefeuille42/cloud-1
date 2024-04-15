@@ -1,0 +1,7 @@
+Compte Admin :
+- mlabouri
+- 12345
+
+Compte User :
+- Norminet
+- Croquette

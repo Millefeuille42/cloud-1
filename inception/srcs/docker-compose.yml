@@ -1,0 +1,33 @@
+version: "3"
+services:
+  mariadb:
+    image: mariadb
+    build: ./requirements/mariadb
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - /home/vagrant/data/db:/var/lib/mysql
+  
+  php:
+    image: php
+    build: ./requirements/wordpress
+    restart: always
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    volumes:
+      - /home/vagrant/data/wp-data:/var/www/html
+  
+  nginx:
+    image: nginx
+    build: ./requirements/nginx
+    restart: always
+    depends_on:
+      - php
+    ports:
+      - "443:443"
+    volumes:
+      - /home/vagrant/data/wp-data:/var/www/html
+
