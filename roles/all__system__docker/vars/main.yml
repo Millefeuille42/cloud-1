@@ -1,0 +1,7 @@
+---
+# vars file for all__system__packages
+
+all__system__docker__deb_architecture: {
+  aarch64: arm64,
+  x86_64: amd64
+}

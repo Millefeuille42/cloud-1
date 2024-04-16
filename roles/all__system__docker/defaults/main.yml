@@ -1,0 +1,3 @@
+---
+# defaults file for all__system__docker
+all__system__docker__uninstall: false

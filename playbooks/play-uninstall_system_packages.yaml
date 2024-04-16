@@ -1,0 +1,14 @@
+- name: Uninstall system packages along with docker
+  hosts: cloud_1
+  become: true
+  vars:
+    all__system__packages__uninstall: true
+    all__system__docker__uninstall: true
+  tasks:
+    - name: Uninstall system packages
+      ansible.builtin.import_role:
+        name: all__system__packages
+
+    - name: Uninstall docker
+      ansible.builtin.import_role:
+        name: all__system__docker

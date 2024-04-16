@@ -1,0 +1,4 @@
+---
+# defaults file for all__system__packages
+
+all__system__packages__uninstall: false

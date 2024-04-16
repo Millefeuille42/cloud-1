@@ -1,0 +1,52 @@
+---
+# tasks file for all__inception/
+
+- name: Send inception source
+  ansible.builtin.copy:
+    src: inception
+    dest: "{{ all__inception__base_dir }}"
+    mode: "0744"
+  when: not all__inception__stop
+
+- name: Remove inception folder
+  ansible.builtin.file:
+    path: "{{ all__inception__src_dir }}"
+    state: absent
+  when: all__inception__stop
+
+- name: Set volume folder
+  ansible.builtin.file:
+    path: "{{ all__inception__data_dir }}"
+    state: "{{ 'absent' if all__inception__stop else 'directory' }}"
+    mode: "0744"
+
+- name: Create db volume folder
+  ansible.builtin.file:
+    path: "{{ all__inception__data_dir }}/db"
+    state: directory # noqa: ansible.builtin.file-permissions
+  when: not all__inception__stop
+
+- name: Create wordpress volume folder
+  ansible.builtin.file:
+    path: "{{ all__inception__data_dir }}/wp-data"
+    state: directory
+    # noqa: ansible.builtin.file-permissions
+  when: not all__inception__stop
+
+- name: Run inception
+  ansible.builtin.include_tasks: "{{ item }}"
+  loop:
+    - "images.yaml"
+    - "volumes.yaml"
+    - "networks.yaml"
+    - "containers.yaml"
+  when: not all__inception__stop
+
+- name: Shutdown inception
+  ansible.builtin.include_tasks: "{{ item }}"
+  loop:
+    - "containers.yaml"
+    - "networks.yaml"
+    - "volumes.yaml"
+    - "images.yaml"
+  when: all__inception__stop

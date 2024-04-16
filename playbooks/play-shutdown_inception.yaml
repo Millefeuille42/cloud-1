@@ -1,0 +1,9 @@
+- name: Shutdown inception
+  hosts: cloud_1
+  become: true
+  vars:
+    all__inception__stop: true
+  tasks:
+    - name: Shutdown inception
+      ansible.builtin.import_role:
+        name: all__inception

@@ -8,7 +8,7 @@ services:
       - .env
     volumes:
       - /home/vagrant/data/db:/var/lib/mysql
-  
+
   php:
     image: php
     build: ./requirements/wordpress
@@ -19,7 +19,7 @@ services:
       - .env
     volumes:
       - /home/vagrant/data/wp-data:/var/www/html
-  
+
   nginx:
     image: nginx
     build: ./requirements/nginx
@@ -30,4 +30,3 @@ services:
       - "443:443"
     volumes:
       - /home/vagrant/data/wp-data:/var/www/html
-

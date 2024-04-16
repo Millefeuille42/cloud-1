@@ -1,0 +1,44 @@
+---
+# tasks file for all__system__docker
+
+- name: Remove potential old installation of docker
+  ansible.builtin.apt:
+    pkg:
+      - docker.io
+      - docker-doc
+      - docker-compose
+      - podman-docker
+      - containerd
+      - runc
+    state: absent
+  when: not all__system__docker__uninstall
+
+- name: Add Docker's official GPG key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    keyring: /etc/apt/keyrings/docker.gpg
+    state: "{{ 'absent' if all__system__docker__uninstall else 'present' }}"
+
+- name: Print architecture variables
+  ansible.builtin.debug:
+    msg: "Architecture: {{ all__system__docker__deb_architecture[ansible_architecture] | default(ansible_architecture) }}, Codename: {{ ansible_lsb.codename }}"
+
+- name: Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: >-
+      deb [arch={{ all__system__docker__deb_architecture[ansible_architecture] | default(ansible_architecture) }}
+      signed-by=/etc/apt/keyrings/docker.gpg]
+      https://download.docker.com/linux/debian {{ ansible_lsb.codename }} stable
+    filename: docker
+    state: "{{ 'absent' if all__system__docker__uninstall else 'present' }}"
+
+- name: Update apt and install docker packages
+  ansible.builtin.apt:
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: "{{ 'absent' if all__system__docker__uninstall else 'latest' }}"
+    update_cache: true

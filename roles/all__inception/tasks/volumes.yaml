@@ -1,0 +1,17 @@
+- name: Set wp-data volume
+  community.docker.docker_volume:
+    name: "inception_wp-data"
+    state: "{{ 'absent' if all__inception__stop else 'present' }}"
+    driver_options:
+      type: none
+      device: "{{ all__inception__data_dir }}/wp-data"
+      o: bind
+
+- name: Set db volume
+  community.docker.docker_volume:
+    name: "inception_db"
+    state: "{{ 'absent' if all__inception__stop else 'present' }}"
+    driver_options:
+      type: none
+      device: "{{ all__inception__data_dir }}/db"
+      o: bind

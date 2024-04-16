@@ -1,0 +1,7 @@
+- name: Run inception
+  hosts: cloud_1
+  become: true
+  tasks:
+    - name: Run inception
+      ansible.builtin.import_role:
+        name: all__inception

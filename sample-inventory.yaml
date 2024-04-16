@@ -1,0 +1,11 @@
+---
+cloud_1:
+  hosts:
+    local_vm:
+      ansible_host: cloud-1
+      ansible_user: vagrant
+      ansible_ssh_private_key_file: /vagrant/.vagrant/machines/cloud-1/virtualbox/private_key
+    vps:
+      ansible_host: <remote_host>
+      ansible_user: <privileged_user>
+      ansible_ssh_private_key_file: <key_location>

@@ -1,0 +1,8 @@
+---
+# tasks file for all__system__packages
+
+- name: Install system packages
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ all__system__packages__packages }}"
+    state: "{{ 'absent' if all__system__packages__uninstall else 'latest' }}"

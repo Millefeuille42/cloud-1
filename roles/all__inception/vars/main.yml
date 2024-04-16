@@ -1,0 +1,12 @@
+---
+# vars file for all__inception/
+all__inception__base_dir: "{{ ansible_user_dir }}"
+all__inception__src_dir: "{{ all__inception__base_dir }}/inception"
+all__inception__data_dir: "{{ all__inception__base_dir }}/data"
+all__inception__images:
+  - name: "mariadb"
+    build_folder: "mariadb"
+  - name: "php"
+    build_folder: "wordpress"
+  - name: "nginx"
+    build_folder: "nginx"

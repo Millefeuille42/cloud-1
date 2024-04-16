@@ -1,0 +1,12 @@
+---
+# vars file for all__system__packages
+
+all__system__packages__packages:
+  - vim
+  - curl
+  - wget
+  - git
+  - net-tools
+  - apt-transport-https
+  - gnupg
+  - software-properties-common
