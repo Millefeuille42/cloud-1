@@ -1,9 +1,10 @@
 # cloud-1
 
-This repo also includes a Vagrantfile for a Ansible workstation `cloud-1-workstation` having Ansible pre-installed and a vanilla Debian 12 server for local "development" (preventing the need to rent a cloud server). The workstation has it's hosts file pre-configured to
-access the local vm server with the `cloud-1` hostname.
+This repo also includes a Vagrantfile for a Ansible workstation `cloud-1-workstation` 
+having Ansible pre-installed and a vanilla Debian 12 server for local "development" (preventing the need to rent a cloud server). 
+The workstation has it's hosts file pre-configured toaccess the local vm server with the `cloud-1` hostname.
 
-Inventory is appropriately set, for both cloud and local vm deployement. Uncomment the server you want to use, and fill-in missing / irrelevant parameters for the cloud host.
+Inventory must be appropriately set (from sample file), for both cloud and local vm deployement. Fill-in missing / irrelevant parameters for the cloud host.
 
 ## References
 
@@ -13,6 +14,8 @@ https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.ht
 https://docs.ansible.com/ansible/latest/inventory_guide/index.html#
 
 https://docs.ansible.com/ansible/latest/
+
+https://www.redhat.com/sysadmin/developing-ansible-role
 
 ### Installing Docker with Ansible
 https://docs.docker.com/engine/install/debian/
