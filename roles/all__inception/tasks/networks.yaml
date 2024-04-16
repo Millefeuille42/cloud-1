@@ -1,4 +1,4 @@
 - name: Set inception network
   community.docker.docker_network:
     state: "{{ 'absent' if all__inception__stop else 'present' }}"
-    name: "inception"
+    name: "inception_default"

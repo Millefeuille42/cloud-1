@@ -1,12 +1,12 @@
 - name: Set mariadb container
   community.docker.docker_container:
     state: "{{ 'absent' if all__inception__stop else 'started' }}"
-    name: "inception-mariadb-1"
+    name: "inception_mariadb_1"
     image: "inception_mariadb"
     env_file: "{{ all__inception__src_dir }}/.env"
     restart_policy: always
     networks:
-      - name: "inception"
+      - name: "inception_default"
         aliases: mariadb
     volumes:
       - "inception_db:/var/lib/mysql"
@@ -14,12 +14,12 @@
 - name: Set php container
   community.docker.docker_container:
     state: "{{ 'absent' if all__inception__stop else 'started' }}"
-    name: "inception-php-1"
+    name: "inception_php_1"
     image: "inception_php"
     env_file: "{{ all__inception__src_dir }}/.env"
     restart_policy: always
     networks:
-      - name: "inception"
+      - name: "inception_default"
         aliases: php
     volumes:
       - "inception_wp-data:/var/www/html"
@@ -27,14 +27,14 @@
 - name: Set nginx container
   community.docker.docker_container:
     state: "{{ 'absent' if all__inception__stop else 'started' }}"
-    name: "inception-nginx-1"
+    name: "inception_nginx_1"
     image: "inception_nginx"
     env_file: "{{ all__inception__src_dir }}/.env"
     restart_policy: always
     ports:
       - 443:443
     networks:
-      - name: "inception"
+      - name: "inception_default"
         aliases: nginx
     volumes:
       - "inception_wp-data:/var/www/html"

@@ -1,0 +1,32 @@
+version: "3"
+services:
+  mariadb:
+    image: inception_mariadb
+    build: ./srcs/mariadb
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ~/data/db:/var/lib/mysql
+
+  php:
+    image: inception_php
+    build: ./srcs/wordpress
+    restart: always
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    volumes:
+      - ~/data/wp-data:/var/www/html
+
+  nginx:
+    image: inception_nginx
+    build: ./srcs/nginx
+    restart: always
+    depends_on:
+      - php
+    ports:
+      - "443:443"
+    volumes:
+      - ~/data/wp-data:/var/www/html

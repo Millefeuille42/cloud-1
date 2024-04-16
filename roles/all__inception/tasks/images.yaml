@@ -4,7 +4,7 @@
     state: "{{ 'absent' if all__inception__stop else 'present' }}"
     source: build
     build:
-      path: "{{ all__inception__src_dir }}/srcs/requirements/{{ image.build_folder }}"
+      path: "{{ all__inception__src_dir }}/srcs/{{ image.build_folder }}"
   loop: "{{ all__inception__images }}"
   loop_control:
     loop_var: image
