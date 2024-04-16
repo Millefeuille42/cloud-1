@@ -1,6 +1,10 @@
-cloud1:
-  hosts:
-    cloud-1:
-      ansible_host: "cloud-1"
-      ansible_user: "vagrant"
-      ansible_ssh_private_key_file: "/vagrant/.vagrant/machines/cloud-1/virtualbox/private_key"
+#cloud1:
+#  hosts:
+    #local-vm:
+    #  ansible_host: "cloud-1"
+    #  ansible_user: "vagrant"
+    #  ansible_ssh_private_key_file: "/vagrant/.vagrant/machines/cloud-1/virtualbox/private_key"
+    #vps:
+    #  ansible_host: "<remote_host>"
+    #  ansible_user: "cloud-1"
+    #  ansible_ssh_private_key_file: "/vagrant/.vagrant/vps_key"

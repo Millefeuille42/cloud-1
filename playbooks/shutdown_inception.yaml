@@ -1,6 +1,5 @@
 - name: Shutdown inception and prune system
   hosts: cloud1
-  become: yes
   tasks:
     - name: Remove nginx container
       docker_container:
@@ -47,18 +46,13 @@
         state: absent
         name: inception_db
 
-    - name: Remove volume folder
-      file:
-        path: /home/vagrant/data
-        state: absent
-
     - name: Remove inception folder
       file:
-        path: /home/vagrant/inception
+        path: "{{ ansible_user_dir }}/inception"
         state: absent
 
-    - name: Remove line from hosts file
-      lineinfile:
+    - name: Remove volume folder
+      become: true
+      file:
+        path: "{{ ansible_user_dir }}/data"
         state: absent
-        dest: /etc/hosts
-        line: "127.0.0.1 mlabouri.42.fr"

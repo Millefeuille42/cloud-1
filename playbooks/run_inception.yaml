@@ -1,36 +1,24 @@
 - name: Run inception
   hosts: cloud1
-  become: yes
   tasks:
-  - name: Check if inception source is present on remote
-    stat:
-      path: /home/vagrant/inception
-    register: inception_source
-
   - name: Send inception source
     copy:
       src: ../inception
-      dest: /home/vagrant
-    when: not inception_source.stat.exists
-
-  - name: Set /etc/hosts file
-    lineinfile:
-      dest: /etc/hosts
-      line: "127.0.0.1 mlabouri.42.fr"
+      dest: "{{ ansible_user_dir }}"
 
   - name: Create volume folder
     file:
-      path: /home/vagrant/data
+      path: "{{ ansible_user_dir }}/data"
       state: directory
   
   - name: Create db volume folder
     file:
-      path: /home/vagrant/data/db
+      path: "{{ ansible_user_dir }}/data/db"
       state: directory
   
   - name: Create wordpress volume folder
     file:
-      path: /home/vagrant/data/wp-data
+      path: "{{ ansible_user_dir }}/data/wp-data"
       state: directory
   
   - name: Build mariadb image
@@ -39,7 +27,7 @@
       state: present
       source: build
       build:
-        path: /home/vagrant/inception/srcs/requirements/mariadb
+        path: "{{ ansible_user_dir }}/inception/srcs/requirements/mariadb"
   
   - name: Build php image
     docker_image:
@@ -47,7 +35,7 @@
       state: present
       source: build
       build:
-        path: /home/vagrant/inception/srcs/requirements/wordpress
+        path: "{{ ansible_user_dir }}/inception/srcs/requirements/wordpress"
 
   - name: Build nginx image
     docker_image:
@@ -55,7 +43,7 @@
       state: present
       source: build
       build:
-        path: /home/vagrant/inception/srcs/requirements/nginx
+        path: "{{ ansible_user_dir }}/inception/srcs/requirements/nginx"
 
   - name: Create inception network
     docker_network:
@@ -68,7 +56,7 @@
       state: present
       driver_options:
         type: none
-        device: /home/vagrant/data/wp-data
+        device: "{{ ansible_user_dir }}/data/wp-data"
         o: bind
 
   - name: Create db volume
@@ -77,7 +65,7 @@
       state: present
       driver_options:
         type: none
-        device: /home/vagrant/data/db
+        device: "{{ ansible_user_dir }}/data/db"
         o: bind
   
   - name: Run mariadb container
@@ -85,7 +73,7 @@
       state: started
       name: inception-mariadb-1
       image: inception_mariadb
-      env_file: /home/vagrant/inception/srcs/.env
+      env_file: "{{ ansible_user_dir }}/inception/.env"
       restart_policy: always
       networks:
         - name: "inception"
@@ -98,7 +86,7 @@
       state: started
       name: inception-php-1
       image: inception_php
-      env_file: /home/vagrant/inception/srcs/.env
+      env_file: "{{ ansible_user_dir }}/inception/.env"
       restart_policy: always
       networks:
         - name: "inception"
@@ -111,7 +99,7 @@
       state: started
       name: inception-nginx-1
       image: inception_nginx
-      env_file: /home/vagrant/inception/srcs/.env
+      env_file: "{{ ansible_user_dir }}/inception/.env"
       restart_policy: always
       ports:
         - "443:443"

@@ -81,8 +81,8 @@ $table_prefix = 'wp_';
  */
 define( 'WP_DEBUG', false );
 
-define('WP_SITEURL', 'https://mlabouri.42.fr');
-define('WP_HOME', 'https://mlabouri.42.fr');
+define('WP_SITEURL', 'https://ericard.fr');
+define('WP_HOME', 'https://ericard.fr');
 
 /* Add any custom values between this line and the "stop editing" line. */
 
